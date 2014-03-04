@@ -41,6 +41,7 @@
     "chai": "~1.8.1",
     "chai-jquery": "~1.1.2",
     "almond": "~0.2.6",
-    "phantomjs": "^1.9.7-1"
+    "phantomjs": "^1.9.7-1",
+    "doxx": "^0.7.3"
   }
 }
