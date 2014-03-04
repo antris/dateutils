@@ -13,6 +13,11 @@ define(function(require) {
   $.continuousCalendar = {
     "version" : "4.6.1"
   }
+  /**
+   * Creates continuous calendar to given container(s)
+   * @param options Object containing initial options
+   * @returns {*|Array|Object|String}
+   */
   $.fn.continuousCalendar = function(options) {
     return this.each(function() { _continuousCalendar.call($(this), options) })
     function _continuousCalendar(options) {

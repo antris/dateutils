@@ -1,6 +1,16 @@
 define(function(require) {
   var $ = require('jquery')
 
+  /**
+   * DateTime constructor
+   * @param year
+   * @param month
+   * @param date
+   * @param hours
+   * @param minutes
+   * @param seconds
+   * @constructor
+   */
   function DateTime(year, month, date, hours, minutes, seconds) {
     if(arguments.length === 0) this.date = new Date()
     else if(year instanceof Date) this.date = new Date(year.getTime())
@@ -37,20 +47,41 @@ define(function(require) {
   DateTime.y2kYear = 50
   DateTime.monthNumbers = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 }
 
+  /**
+   * Factory method for creating dateTime with date and time
+   * @param year
+   * @param month
+   * @param day
+   * @param hours
+   * @param minutes
+   * @returns {DateTime}
+   */
   DateTime.fromDateTime = function(year, month, day, hours, minutes) {
     return new DateTime(year, month, day, hours, minutes)
   }
 
+  /**
+   * Factory method for creating dateTime with midnight time
+   * @param year
+   * @param month
+   * @param day
+   * @returns {DateTime}
+   */
   DateTime.fromDate = function(year, month, day) {
     return DateTime.fromDateTime(year, month, day, 0, 0)
   }
 
+  /**
+   * Factory method for creating dateTime from date object
+   * @param date
+   * @returns {*}
+   */
   DateTime.fromDateObject = function(date) {
     return DateTime.fromMillis(date.getTime())
   }
 
   /**
-   * Returns date from ISO date ignoring time information
+   * Returns dateTime from ISO date ignoring time information
    * @param isoDate String YYYY-MM-DDTHH-MM
    * @return {DateTime}
    */
@@ -98,6 +129,11 @@ define(function(require) {
     }
   }
 
+  /**
+   * Factory method for creating dateTime from current time ms.
+   * @param ms
+   * @returns {DateTime}
+   */
   DateTime.fromMillis = function(ms) { return new DateTime(new Date(ms)) }
 
   $.each([
@@ -113,12 +149,22 @@ define(function(require) {
     DateTime.prototype[func] = function() { return this.date[func]() }
   })
 
+  /**
+   * Returns new DateTime with reset ms
+   * @returns {*}
+   */
   DateTime.prototype.withResetMS = function() {
     var newDate = this.clone()
     newDate.date.setMilliseconds(0)
     return newDate
   }
 
+  /**
+   * Returns new DateTime with given hours and minutes
+   * @param h
+   * @param m
+   * @returns {*}
+   */
   DateTime.prototype.withTime = function(h, m) {
     if(typeof h === 'string') {
       var hoursAndMinutes = h.split(':')
@@ -139,6 +185,10 @@ define(function(require) {
   DateTime.DAY = 24 * DateTime.HOUR
   DateTime.WEEK = 7 * DateTime.DAY
 
+  /**
+   * Returns DateTime with current time. Note, this function returns same time when called repeatedly.
+   * @returns {DateTime|*}
+   */
   DateTime.now = function() {
     if(typeof DateTime._now === 'undefined') {
       DateTime._now = new DateTime()
@@ -146,6 +196,10 @@ define(function(require) {
     return DateTime._now
   }
 
+  /**
+   * Returns DateTime with last midnight
+   * @returns {*}
+   */
   DateTime.today = function() {
     if(typeof DateTime._today == 'undefined') {
       DateTime._today = new DateTime().getOnlyDate()
@@ -153,6 +207,12 @@ define(function(require) {
     return DateTime._today
   }
 
+  /**
+   * Returns number of days for given year and month
+   * @param year
+   * @param month
+   * @returns {number}
+   */
   DateTime.getDaysInMonth = function(year, month) {
     if(month > 12 || month < 1)
       throw new Error('Month must be between 1-12')
